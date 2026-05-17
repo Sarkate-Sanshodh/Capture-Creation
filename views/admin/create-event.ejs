@@ -1,0 +1,63 @@
+<%- include('../partials/header'); -%>
+    <div class="mx-w-lg mx-auto bg-white p-8 rounded-xl shadow-md">
+        <h2 class="text-3xl font-semibold mb-6 text-center">CREATE NEW <span class="text-teal-700 text-4xl text-bold">EVENT</span> </h2>
+        <form id="create-event-form">
+            <div class="mb-4">
+                <label for="eventName" class="block text-gray-700 font-semibold mb-2">Event Name (eg. , Haldi Ceremony , Birthaday Party)</label>
+                <input type="text" name="eventName" id="eventName" required class="w-full px-4 py-2 border roundd-lg hover:outline-none focus:ring-2 focus:ring-teal-500 ">
+            </div>
+
+            <div class="mb-4">
+                <label for="eventDate" class="block text-gray-700 font-semibold mb-2">Event Date</label>
+                <input type="date" name="eventDate" id="eventDate" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            <div class="error text-red-500 mb-4 text-sm"></div>
+            <button type="submit" class="w-full bg-teal-600 text-white font-bold px-2 py-2 rounded-lg hover:bg-teal-700 transition duration-300">Create Event</button>
+
+
+        </form>
+    </div>
+
+     <%- include('../partials/footer'); -%> 
+<script>
+  const form = document.querySelector('#create-event-form')
+  const errorDiv =  document.querySelector('.error');
+
+  form.addEventListener('submit'  , async (e)=>{
+    e.preventDefault();
+ 
+    errorDiv.textContent = '' ;
+    const eventName = form.eventName.value ;
+    const eventDate  = form.eventDate.value ;
+
+    try{
+       const res = await fetch('/admin/create-event' , {
+        method : 'POST' , 
+        body : JSON.stringify({eventName  , eventDate}),
+        headers: { 'Content-Type': 'application/json'  }
+       });
+
+       const data =  await res.json();
+       if(data.error){
+          errorDiv.textContent = data.error;
+       }
+        if (data.redirect) {
+          location.assign(data.redirect);
+       }
+    }
+    catch(err){
+      console.log(err);
+   
+    }
+
+  })
+
+
+
+
+
+
+
+
+</script>
+

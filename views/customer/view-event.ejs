@@ -1,0 +1,113 @@
+ <%- include('../partials/customerHeader'); -%>
+
+  <div class="bg-white p-6 md:p-8 roundd-xl shadow-md">
+    <h1 class="text-3xl md:text-4xl font-bold text-center mb-2">Birthaday</h1>
+    <p class="text-gray-600 text-center text-lg mb-6">Select the photos you want for the album , then click the submit selection button below</p>
+
+    <form id="selection-form">
+       <% if(event.photos.length > 0){ %>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:gap-4 lg:grid-cols-5 gap-4">
+                <% for(const photo of event.photos) { %> 
+                    <label class="cursor-pointer relative">
+                        <input type="checkbox" name="selectedPhotos" value="<%= photo %>" <%= event.selectedPhotos && event.selectedPhotos.includes(photo) ? 'checked' : '' %> class="absolute top-2 right-2 h-6 w-6 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 peer">
+                        <img src="<%= photo %>" alt="Event photos" class="rounded-lg object-cover w-full h-full transition-transform duration-300 peer-checked:scale-95 peer-checked:ring-4 peer-checked:ring-indigo-500">
+                    </label>
+                    <% } %>
+                </div>
+
+                 <div class="mt-8 text-center sticky bottom-0 bg-white py-3 sm:py-4 shadow-lg rounded-lg border-t">
+                 <p id="selection-count" class="font-semibold mb-4">0 photos selected</p>
+                 <!-- Rang 'indigo' mein badla gaya -->
+                <button type="submit" class="bg-[#4753eb] text-white font-bold py-2 px-8 sm:py-3 sm:px-12 rounded-full hover:bg-opacity-90 text-base sm:text-lg transition-transform hover:scale-105">
+                    Submit Selections
+                </button>
+                 <div id="success-message" class="text-green-600 font-bold mt-4" style="display: none;"></div>
+            </div>
+
+            <% }else {  %>
+              
+            <p class="text-center text-gray-500 py-10">The photographer has not uploaded any photos to this event yet.</p>
+        <% } %>
+            
+    </form>
+  </div>
+
+   <%- include('../partials/footer'); -%> 
+
+  <script>
+   
+   const form = document.getElementById('selection-form')
+   const checkboxs = document.querySelectorAll('input[type="checkbox"]');
+   const countDisplay = document.getElementById('selection-count')
+   const successMessage = document.getElementById('success-message')
+
+
+   function showMessage(text , isError = false){
+    successMessage.textContent = text ;
+    successMessage.style.display = 'block';
+    successMessage.className = isError ? 'text-red-600 font-bold mt-4' : 'text-green-600 font-bold mt-4';
+
+   }
+
+   function updateCount(){
+    const selectedCount = document.querySelectorAll('input[name="selectedPhotos"]:checked').length ;
+    countDisplay.textContent = `${selectedCount} photos selected`;
+   } 
+checkboxs.forEach(checkbox => {
+    checkbox.addEventListener('change' , () => {
+        updateCount();
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton.disabled) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Update Selections';
+            submitButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
+            submitButton.classList.add('bg-[#4753eb]', 'hover:bg-opacity-90');
+            successMessage.style.display = 'none';
+        }
+    });
+});
+
+form.addEventListener('submit' , async(e)=>{
+    e.preventDefault();
+
+
+const selectedPhotos = Array.from(document.querySelectorAll('input[name="selectedPhotos"]:checked')).map(cb => cb.value);
+if(selectedPhotos.length === 0 ){
+        showMessage('Please select at least one photo.', true);
+            return;
+}
+
+try{
+    const res = await fetch(window.location.pathname + '/select' , {
+        method:'POST',
+        body:JSON.stringify({selectedPhotos}),
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const data = await res.json();
+
+         
+            if (res.ok) {
+                showMessage(data.message, false); // Success message
+              const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Submitted!';
+                submitButton.classList.remove('bg-[#4753eb]', 'hover:bg-opacity-90');
+                submitButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+
+            } else {
+               showMessage(data.error || 'Something went wrong.', true);
+            }
+}
+catch (err) {
+            console.error('Submission error:', err);
+           showMessage('There was an error submitting your request.', true);  
+
+}
+
+
+});
+updateCount();
+
+
+  </script>

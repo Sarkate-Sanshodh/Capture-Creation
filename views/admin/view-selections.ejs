@@ -1,0 +1,33 @@
+ <%- include('../partials/header'); -%>
+
+ <div class="bg-white p-4 sm:p-8 roundd-xl shadow-md ">
+    <h1 class="text-3xl sm:text-4xl font-bold mb-2">Selection For <%= event.eventName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') %></h1>
+    <p class="text-gray-600 text-base sm:text-lg mb-6">The customer has selected a total of <%= event.selectedPhotos.length %></p>
+    
+    <% if(event.selectedPhotos.length > 0) { %>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+
+            
+            <% for(const photo of event.selectedPhotos) { %>
+                <div class="rounded-lg overflow-hidden border-4  border-teal-500 shadow-lg">
+                    <img src="<%= photo %>" alt="image" class="w-full h-full object-cover">
+                </div>
+                <% } %>
+                
+            </div>
+                <% } else { %>
+                    <p class="text-center text-gray-500 py-10">The customer has not selected any photos yet.</p>
+                    <% }  %>
+                </div>
+        
+            <div class="mt-8 text-center"><a href="/admin/event/<%= event._id %>" class="text-indigo-600 font-samibold hover:border-underline ">&larr;; Back to the Event Details</a></div>
+                
+
+
+
+
+
+
+ <%- include('../partials/footer'); -%> 
+
+

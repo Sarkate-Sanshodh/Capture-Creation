@@ -1,0 +1,9 @@
+/* public/styles.css */
+/* Yahan aap custom CSS add kar sakte hain, agar zaroorat pade */
+
+/* Body ko full height lene ke liye taaki footer neeche rahe */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

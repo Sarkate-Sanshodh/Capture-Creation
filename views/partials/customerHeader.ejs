@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoSelector | <%= title %></title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-3">
+            <!-- Yeh ek simple header hai sirf logo ke saath, bina login/dashboard links ke -->
+            <div>
+                 <a href="/" class="flex items-center gap-3 group">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 60" width="160" height="50" role="img" aria-labelledby="title">
+          <title id="title">Capture Creation Logo</title>
+          <defs>
+            <linearGradient id="tealGrad" x1="0" x2="1">
+              <stop offset="0%" stop-color="#0d9488" />
+              <stop offset="100%" stop-color="#14b8a6" />
+            </linearGradient>
+          </defs>
+
+          <!-- Camera body -->
+          <rect x="0" y="15" width="50" height="30" rx="8" fill="url(#tealGrad)" />
+          <!-- Lens -->
+          <circle cx="25" cy="30" r="8" fill="white" opacity="0.2" />
+          <circle cx="25" cy="30" r="5" fill="url(#tealGrad)" />
+          <!-- Flash -->
+          <rect x="15" y="10" width="12" height="6" rx="2" fill="#0f766e" />
+          <!-- Shutter dot -->
+          <circle cx="32" cy="25" r="1.5" fill="#fff" />
+
+          <!-- Text -->
+          <text x="65" y="32" font-family="Poppins, sans-serif" font-size="20" font-weight="700" fill="#0f766e">
+            Capture
+          </text>
+          <text x="65" y="50" font-family="Poppins, sans-serif" font-size="16" font-weight="500" fill="url(#tealGrad)">
+            Creation
+          </text>
+        </svg>
+      </a>
+            </div>
+        </div>
+    </nav>
+    <!-- flex-grow class add ki gayi hai taaki footer neeche rahe -->
+    <main class="container mx-auto px-6 py-8 flex-grow">

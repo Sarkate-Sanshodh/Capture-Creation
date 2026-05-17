@@ -1,0 +1,76 @@
+<%- include('../partials/header'); -%>
+
+    <div class="bg-white p-4 md:p-8rounded-xl shadow-md ">
+        <!-- // event information  -->
+        <div class="border-b pb-6 mb-6">
+            <h1 class="text-3xl sm:text-4xl font-bold mb-4">
+                <%= event.eventName %>
+            </h1>
+            <p class="text-gray-600 text-base sm:text-lg mb-4">
+                <%= new Date(event.eventDate).toLocaleDateString('en-GB', { day: 'numeric' , month: 'long' ,
+                    year: 'numeric' }) %>
+            </p>
+
+
+            <!-- shareble link for customer--->
+            <div class="bg-gray-100 p-4 rounded-xl">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Shareable Link for Customer:</label>
+                <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
+                    <input id="shareLink" type="text"
+                        value="<%= `${req.protocol}://${req.get('host')}/event/${event.uniqueLink}` %>" readonly
+                        class="w-full bg-white px-3 py-2 border rounded-lg focus:outline-none">
+                    <button onclick="copyLink()"
+                        class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 cursor-pointer">Copy</button>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- view selections button  -->
+         <a href="/admin/event/<%= event._id %>/selections" class="mt-6 mb-5 inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700"> View Selected Photos (<%= event.selectedPhotos.length %>) </a>
+
+        <!-- photo uploaded section  -->
+         <div class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Upload Photos</h2>
+                <form action="/admin/event/<%= event._id %>/upload" method="post" enctype="multipart/form-data" class="border-dashed border-4 border-gray-300 p-8 rounded-lg text-center">
+                    <input type="file" name="photos" multiple required class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"/>
+                    <p class="text-md text-gray-500 mt-2 ">You can select multiple photos at once (JPG , PNG , WEBP) </p>
+                    <button type="submit" class="mt-4 bg-teal-600 py-2 px-6 font-bold hover:bg-teal-700 cursor-pointer rounded-lg text-white">Upload</button>
+                </form>
+         </div>
+
+         <!-- uploaded photos gallary -->
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4">Uploaded Photos (<%= event.photos.length %>)</h2>
+            <% if(event.photos.length > 0) { %> 
+               <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
+            <% for(const photo of event.photos){ %>
+                 <div class="rounded-lg overflow-hidden border-1 border-gray-300 shadow-lg">
+                     <img src="<%= photo %>" alt="Event photo" class="w-full h-full object-cover">
+                 </div>
+           <%  } %>
+               </div>
+            <%} else { %>
+                <p class="text-center text-gray-500 py-6 text-xl ">No photos have been uploaded yet.</p>
+
+                <% } %>
+          </div>
+
+    </div>
+
+     <%- include('../partials/footer'); -%> 
+
+
+
+
+
+<script>
+    function copyLink(){
+        const linkInput = document.getElementById('shareLink')
+        linkInput.select();
+        linkInput.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand('copy');
+        alert('Link copied to clipboard!');
+
+    }
+</script>
