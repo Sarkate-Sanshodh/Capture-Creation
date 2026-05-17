@@ -37,7 +37,7 @@ module.exports.signup_post = async (req, res) => {
             return res.status(400).json({ errors: 'User with this email already exists' });
         }
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otp = "123456"; // Static OTP for easy access
         const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
 
         if (existingUser) {
@@ -98,7 +98,7 @@ module.exports.login_post = async (req, res) => {
         const user = await User.login(email, password);
 
         if (!user.isVerified) {
-            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+            const otp = "123456"; // Static OTP for easy access
             user.otp = otp;
             user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
             await user.save();
